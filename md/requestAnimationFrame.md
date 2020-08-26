@@ -7,3 +7,5 @@
 ## setTimeout
 
 ## requestAnimationFrame
+
+[requestAnimationFrame测试](../src/TS/requestAnimationFrame.ts)

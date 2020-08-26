@@ -1,10 +1,12 @@
 let element:HTMLElement | null
 let startStamp: DOMHighResTimeStamp | undefined
-// document.onload = () => {
+
+// document.ready = () => {
 //     rotate()
 // }
 
 window.onload = () => {
+    console.log('onload')
     rotate()
 }
 
@@ -18,7 +20,6 @@ function animate(timestamp: DOMHighResTimeStamp) {
         startStamp = timestamp
     }
     const elapsed = timestamp - startStamp
-    console.log(elapsed);
     if (element != null) {
         element.style.transform = `rotate(${0.01 * elapsed}deg)`
     }

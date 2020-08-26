@@ -1,10 +1,11 @@
 "use strict";
 var element;
 var startStamp;
-// document.onload = () => {
+// document.ready = () => {
 //     rotate()
 // }
 window.onload = function () {
+    console.log('onload');
     rotate();
 };
 function rotate() {
@@ -16,7 +17,6 @@ function animate(timestamp) {
         startStamp = timestamp;
     }
     var elapsed = timestamp - startStamp;
-    console.log(elapsed);
     if (element != null) {
         element.style.transform = "rotate(" + 0.01 * elapsed + "deg)";
     }
