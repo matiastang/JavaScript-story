@@ -35,6 +35,25 @@ Number.prototype.numberMatch = function(len = 0) {
     return Number(one)
 }
 
+/*
+* bit -> 指定右移位数
+*/
+Number.prototype.sizeConversion = function(hex = 10) {
+    return this >> hex
+};
+/*
+* bit -> Kb
+*/
+Number.prototype.sizeConversionK = function() {
+    return this.sizeConversion()
+};
+/*
+* bit -> Mb
+*/
+Number.prototype.sizeConversionM = function() {
+    return this.sizeConversion(20)
+};
+
 module.exports = {
 
 }
