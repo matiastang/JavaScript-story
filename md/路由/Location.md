@@ -1,3 +1,19 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: matias tang
+ * @Date: 2020-09-17 11:17:17
+ * @LastEditors: matias tang
+ * @LastEditTime: 2020-09-17 15:39:37
+-->
+<!-- TOC -->
+
+- [Location](#location)
+  - [介绍](#介绍)
+  - [属性](#属性)
+  - [方法](#方法)
+
+<!-- /TOC -->
 # Location
 
 [Location](https://developer.mozilla.org/zh-CN/docs/Web/API/Location)
@@ -43,3 +59,14 @@ Location.replace()
 用给定的URL替换掉当前的资源。与 assign() 方法不同的是用 replace()替换的新页面不会被保存在会话的历史 History中，这意味着用户将不能用后退按钮转到该页面。
 Location.toString()
 返回一个DOMString，包含整个URL。 它和读取URLUtils.href的效果相同。但是用它是不能够修改Location的值的。
+
+```js
+/**
+ * @name: 获取当前URL参数的对象
+ * @test: ./test/Jest/URL.test.js mtGetURLParameters test
+ * @msg: 
+ * @param {当前URL} 
+ * @return {参数对象} 
+ */
+const mtGetURLParameters = url => (url.match(/([^?=&]+)(=([^&]*))/g) || []).reduce((a, v) => ((a[v.slice(0, v.indexOf('='))] = v.slice(v.indexOf('=') + 1)), a),{});
+```

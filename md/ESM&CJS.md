@@ -1,3 +1,20 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: matias tang
+ * @Date: 2020-08-25 16:39:48
+ * @LastEditors: matias tang
+ * @LastEditTime: 2020-09-17 15:40:16
+-->
+<!-- TOC -->
+
+- [ESM&CJS](#esmcjs)
+  - [Node.js 的模块加载方法](#nodejs-的模块加载方法)
+  - [CJS](#cjs)
+  - [ESM](#esm)
+    - [ESM原理](#esm原理)
+
+<!-- /TOC -->
 # ESM&CJS
 
 [ES6 模块与 CommonJS 模块的差异](https://es6.ruanyifeng.com/#docs/module-loader#ES6-%E6%A8%A1%E5%9D%97%E4%B8%8E-CommonJS-%E6%A8%A1%E5%9D%97%E7%9A%84%E5%B7%AE%E5%BC%82)
@@ -37,3 +54,28 @@ $ node my-app.js
 
 `ESM` 采用的是静态异步加载，最大的区别便是采用了静态分析。大家都知道 `import` 必须要写在文件的顶层，这也就是为了能够静态分析你需要加载的模块。首先他能很好的解决循环依赖的问题。
 其次是异步加载。在 `CJS` 中，`JS` 的加载是同步进行的，也就是说我必须要等待上一个 `JS` 加载完成，才能够加载下一个 `JS`，大家也懂得，这样很明显浪费了 `Node` 异步的有点。这也就会导致如果 `JS` 文件过多，系统的启动时间会被大大加长。
+```
+import {firstName, lastName, year} from './main.js';
+import 'lodash'；
+import {default as foo} from 'modules';
+import * as circle form './circle';  //引入circle文件内所有的方法，集成在circle下面
+//export default 默认输出
+var a = 1;
+export default a;
+import _ from 'lodash'; //因为lodash默认输出的是_
+import _,{each, forEach } from 'lodash';  //可以同时输入默认方法和其他接口
+import React, { Component } from 'react'; //说明react中默认输出方法是React，里面包含Component类的接口输出。
+```
+
+### ESM原理
+模块开发时，其实是构建依赖关系图的过程，模块之间的依赖通过import导入语句找到其所依赖的其他代码文件，依赖关系会指定一个入口文件。
+![ESM1](./images/ESM1.webp)
+但是浏览器并不能直接使用这些代码，需要进行解析所有文件，并把它们变成一种模块记录（Module Record）的数据结构，解析后再变成模块实例，模块实例会包含代码+状态，其实就是指令+变量值的结合。
+对于模块而言，真正需要的是模块实例。
+模块加载从入口文件开始，最终生成完整的模块实例关系图。过程包含：
+1，构建：查找，下载，然后把所有文件解析成module record。
+2，实例化：为模块分配内存空间，依照导入，导出语句把模块指向对应内存地址。
+3，运行：把内存空间填充为真实值。
+![ESM2](./images/ESM2.webp)
+ESM规范是异步的，上面三个阶段可以独立进行。
+webpack打包原理就是将模块化代码怎么在客户端浏览器进行运行的过程。
