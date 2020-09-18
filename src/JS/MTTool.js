@@ -1,18 +1,89 @@
-// var postItemTool = require('./postTool.js')
-//
-// var testConten = '<p>iQOO 3搭载了基于安卓10的iQOO UI，在Monster UI的基础上对系统图标和界面进行了调整或重绘，采用了新的操作逻辑，整体仍是简约与自然的风格。iQOO UI延续了Funtouch OS一贯的成熟稳定与流畅好用，贴心的智慧功能也一如既往，下面就与我一起了解一下强大的iQOO UI吧。</p><p><img alt="https://blue-demo.imdo.co/uploadFile/images/20200328/1baa2961e380e4c4237408b6d938ee16.jpg" src="https://blue-demo.imdo.co/uploadFile/images/20200328/1baa2961e380e4c4237408b6d938ee16.jpg"></p><p><br></p><p><img alt="https://blue-demo.imdo.co/uploadFile/images/20200328/2a548d673bf143fa179e538c91fe55a0.jpg" src="https://blue-demo.imdo.co/uploadFile/images/20200328/2a548d673bf143fa179e538c91fe55a0.jpg"><br><p><img alt="https://blue-demo.imdo.co/uploadFile/images/20200328/312e300d06837911aee62fb172ae5502.jpg" src="https://blue-demo.imdo.co/uploadFile/images/20200328/312e300d06837911aee62fb172ae5502.jpg"></p><p><a target="_self" href="https://www.vivo.com.cn">https://www.vivo.com.cn</a></p></p>';
-// console.log(postItemTool.getPostType(testConten))
-// console.log(postItemTool.getPostImageSrc(testConten))
-//
-// testConten = '阿斯顿发送到<p style="text-align: center;"><span style="text-align: start;">《灵兽》</span></p ><p style="text-align: center;"><br></p ><p style="text-align: center;"><iframe frameborder="0" src="https://v.qq.com/iframe/player.html?vid=p0033x7mst9&amp;auto=0" allowfullscreen=""></iframe></p >';
-// console.log(postItemTool.getPostType(testConten))
-// console.log(postItemTool.getPostVideoVid(testConten))
-//
-// testConten = '阿斯顿发送到<p style="text-align: center;"><span style="text-align: start;">《灵兽》</span></p ><p style="text-align: center;"><br></p ><p style="text-align: center;"><iframe frameborder="0" src="https://v.qq.com/iframe/player.html?vid=p0033x7mst9" allowfullscreen=""></iframe></p >';
-// console.log(postItemTool.getPostType(testConten))
-// console.log(postItemTool.getPostVideoVid(testConten))
-//
-// return
+/**
+ * @name: 防抖函数
+ * @test: test font
+ * @msg: 
+ * @param {type} 
+ * @return {type} 
+ */
+const debounce = (fb, delay) => {
+    let time = null;
+    return () => {
+        if (time !== null) {
+            clearTimeout(time)
+        }
+        time = setTimeout(fb, delay)
+    }
+}
+
+/**
+ * @name: 节流（定时器）
+ * @test: test font
+ * @msg: 当第一次触发事件时，不会立即执行函数，而是在delay秒后才执行。而后再怎么频繁触发事件，也都是每delay时间才执行一次。
+ * @param {type} 
+ * @return {type} 
+ */
+const throttle_time = (fb, delay) => {
+    let time = null;
+    return function() {
+        if (time !== null) {
+            return
+        }
+        var context = this           
+        var args = arguments
+        time = setTimeout(function() {
+            fb.apply(context, args)
+            time = null
+        }, delay)
+    }
+}
+
+/**
+ * @name: 节流（时间戳）
+ * @test: test font
+ * @msg: 当高频事件触发时，第一次会立即执行（事件绑定函数与真正触发事件的间隔大于delay），而后再怎么频繁地触发事件，也都是每delay时间才执行一次。
+ * @param {type} 
+ * @return {type} 
+ */
+const throttle_date = (fb, delay) => {
+    let prev = Date.now()
+    return function() {
+        let now = Date.now()
+        if (now - prev < delay) {
+            return
+        }
+        let context = this           
+        let args = arguments
+        fb.apply(context, args)
+    }
+}
+
+/**
+ * @name: 节流（时间戳+定时器）
+ * @test: test font
+ * @msg: 当第一次触发事件时马上执行事件处理函数，最后一次触发事件后也还会执行一次事件处理函数。
+ * @param {type} 
+ * @return {type} 
+ */
+const throttle = (fb, delay) => {
+    let time = null
+    let startTime = Date.now()
+    return function() {
+        let nowTime = Date.now()
+        let remaining = delay - (nowTime - startTime)
+        let context = this           
+        let args = arguments
+        clearTimeout(time)
+        if (remaining <= 0) {
+            fb.apply(context, args)
+            startTime = Date.now()
+        } else {
+            time = setTimeout(function() {
+                fb.apply(context, args)
+                startTime = Date.now()
+            }, remaining)
+        }
+    }
+}
 
 // ES6
 
@@ -91,3 +162,10 @@ $.fn.parseForm=function(){
   });
   return serializeObj;
 };
+
+export {
+    debounce,
+    throttle_time,
+    throttle_date,
+    throttle
+}
