@@ -4,7 +4,7 @@
  * @Author: matias tang
  * @Date: 2020-09-25 11:24:40
  * @LastEditors: matias tang
- * @LastEditTime: 2020-09-25 12:16:52
+ * @LastEditTime: 2020-09-25 14:17:13
  */
 // [IOS设备机型的识别](https://blog.csdn.net/github_37373329/article/details/84990706)
 /*
@@ -54,7 +54,6 @@ let canvas, gl, glRenderer, models,iosDevices = {
 
 function isIPhoneX(fn){
     var u = navigator.userAgent;
-    debugger;
     var isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
     if (isIOS) {    	
         if (screen.height == 812 && screen.width == 375){
@@ -73,7 +72,6 @@ function isIPhoneX(fn){
  * @return {type} 
  */
 const isAndroid = () => {
-    debugger
     let u = navigator.userAgent
     if (u.indexOf("Android") > -1 || u.indexOf("Linux") > -1) {
         if (window.ShowFitness !== undefined) return true
@@ -89,14 +87,12 @@ const isAndroid = () => {
  * @return {type} 
  */
 const isIos = () => {
-    debugger
     var u = navigator.userAgent
     if (u.indexOf("iPhone") > -1 || u.indexOf("iOS") > -1) {
         return true
     }
     return false
     // let u = navigator.userAgent
-    // debugger
     // let isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/) //ios终端
     // return isIOS
 }
@@ -109,7 +105,6 @@ const isIos = () => {
  * @return {type} 
  */
 const isWX = () => {
-    debugger
     let ua = window.navigator.userAgent,
     app = window.navigator.appVersion;
     // alert('浏览器版本: ' + app + '\n' + '用户代理: ' + ua);
@@ -146,11 +141,59 @@ const iphoneVersion = () => {
     return version[1].replace(/_/g,".")
 }
 
+const iphoneModelsFromRenderer = () => {
+    /*
+    要找到确切的GPU型号名称，renderer.js必须将其包含在HTML中，例如：
+
+    <script src="renderer.js" type="text/javascript" async></script>
+    然后，要获取GPU型号名称，只需调用getRenderer传递回调函数的函数来处理结果：
+
+    getRenderer(function(renderer) { console.log(renderer); } );
+    默认情况下，CPU基准测试功能处于禁用状态，因为它可能需要几秒钟才能完成。要启用CPU基准测试，请传递tak.js脚本的同源URL。
+
+    getRenderer(function(renderer) { console.log(renderer); }, "tak.js" );
+    请注意，除非设备是它知道的Apple设备，否则“ getRenderer”功能将始终返回“未知”。如果您还想获取非Apple设备的渲染器名称，则可以将getRenderer与前面描述的WebGL查询结合使用：
+
+    getRenderer(function (value) {
+        if (value == 'Unknown') {
+            var canvas = document.createElement("canvas");
+            if (canvas != null) {
+                var context = canvas.getContext("webgl") ||
+                    canvas.getContext("experimental-webgl");
+                if (context) {
+                    var info = context.getExtension("WEBGL_debug_renderer_info");
+                    if (info) {
+                        value = context.getParameter(info.UNMASKED_RENDERER_WEBGL);
+                    }
+                }
+            }
+        }                
+        console.log(value);
+    });
+        */
+    getRenderer(function (value) {
+        debugger
+        if (value == 'Unknown') {
+            var canvas = document.createElement("canvas");
+            if (canvas != null) {
+                var context = canvas.getContext("webgl") ||
+                    canvas.getContext("experimental-webgl");
+                if (context) {
+                    var info = context.getExtension("WEBGL_debug_renderer_info");
+                    if (info) {
+                        value = context.getParameter(info.UNMASKED_RENDERER_WEBGL);
+                    }
+                }
+            }
+        }                
+        console.log(value);
+    })
+}
+
 const iphoneModels = () => {
     if (!isIos()) {
         return ['not ios']
     }
-    debugger;
     let renderer= _GLRenderer()
     // iOS12.2之后,苹果删除了这个信息，只能拿到Apple GPU这个标识
     alert(renderer)
@@ -201,5 +244,6 @@ export {
     isIos,
     isWX,
     iphoneVersion,
-    iphoneModels
+    iphoneModels,
+    iphoneModelsFromRenderer
 }
