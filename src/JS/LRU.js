@@ -4,7 +4,7 @@
  * @Author: matias tang
  * @Date: 2020-09-21 17:48:22
  * @LastEditors: matias tang
- * @LastEditTime: 2020-09-21 18:00:56
+ * @LastEditTime: 2020-09-25 14:07:05
  */
 // https://www.cnblogs.com/wyq178/p/9976815.html
 class node {
@@ -29,8 +29,8 @@ class LRU {
         let cachesNode = this.caches.filter(function(item, index, cachesArr) {
             return item.key === key
         })
-        if (this.caches.) {
+        // if (this.caches.) {
 
-        }
+        // }
     }
 }
